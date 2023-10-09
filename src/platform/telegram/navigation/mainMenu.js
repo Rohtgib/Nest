@@ -2,7 +2,6 @@ const { postUser } = require("../logic/register.js");
 const { validateUser } = require("../logic/login.js");
 
 function mainMenu(ctx, bot) {
-  console.log(ctx.from);
   let greetMessage = `Hola! Soy ShopSage, tu solucion para ecommerce confiable y facil de usar`;
   bot.telegram.sendMessage(ctx.chat.id, greetMessage, {
     reply_markup: {
@@ -21,16 +20,17 @@ function mainMenu(ctx, bot) {
     },
   });
   bot.action("loginMenu", (ctx) => {
-    loginTelegram(ctx, bot);
+    loginMenu(ctx, bot);
   });
 
   bot.action("registerMenu", (ctx) => {
-    registerTelegram(ctx, bot);
+    registerMenu(ctx, bot);
   });
 }
 
-function loginTelegram(ctx, bot) {
-  console.log(ctx.from);
+function loginMenu(ctx, bot) {
+  ctx.deleteMessage();
+
   let greetMessage = `Bienvenido a ShopSage`;
   ctx.deleteMessage();
   bot.telegram.sendMessage(ctx.chat.id, greetMessage, {
@@ -94,8 +94,9 @@ function loginTelegram(ctx, bot) {
   });
 }
 
-function registerTelegram(ctx, bot) {
-  console.log(ctx.from);
+function registerMenu(ctx, bot) {
+  ctx.deleteMessage();
+
   let greetMessage = `Bienvenido a ShopSage`;
   ctx.deleteMessage();
   bot.telegram.sendMessage(ctx.chat.id, greetMessage, {
@@ -146,7 +147,6 @@ function registerTelegram(ctx, bot) {
 }
 
 function dashboardMenu(ctx, bot) {
-  console.log(ctx.from);
   let greetMessage = `Bienvenido de vuelta!`;
   bot.telegram.sendMessage(ctx.chat.id, greetMessage, {
     reply_markup: {
@@ -173,7 +173,7 @@ function dashboardMenu(ctx, bot) {
     },
   });
   bot.action("browseMenu", (ctx) => {
-    loginTelegram(ctx, bot);
+    loginMenu(ctx, bot);
   });
 
   bot.action("productsMenu", (ctx) => {
@@ -181,7 +181,7 @@ function dashboardMenu(ctx, bot) {
   });
 
   bot.action("optionsMenu", (ctx) => {
-    loginTelegram(ctx, bot);
+    loginMenu(ctx, bot);
   });
 
   bot.action("logout", (ctx) => {
