@@ -1,9 +1,7 @@
-const http = require('http');
+const http = require("http");
 
 // Define a function that makes a POST request to your Express API
 async function postUser(email, password, phone) {
-  const apiUrl = 'http://localhost:3000/insert/user'; // Replace with your API URL
-
   // Create the request data as a JSON string
   const requestData = JSON.stringify({
     email: email,
@@ -13,36 +11,36 @@ async function postUser(email, password, phone) {
 
   // Define the request options
   const options = {
-    hostname: 'localhost',
+    hostname: "localhost",
     port: 8080,
-    path: '/insert/user',
-    method: 'POST',
+    path: "/insert/user",
+    method: "POST",
     headers: {
-      'Content-Type': 'application/json',
-      'Content-Length': Buffer.byteLength(requestData),
+      "Content-Type": "application/json",
+      "Content-Length": Buffer.byteLength(requestData),
     },
   };
 
   return new Promise((resolve, reject) => {
     const req = http.request(options, (res) => {
-      let responseData = '';
+      let responseData = "";
 
-      res.on('data', (chunk) => {
+      res.on("data", (chunk) => {
         responseData += chunk;
       });
 
-      res.on('end', () => {
+      res.on("end", () => {
         // Handle the API response here (e.g., logging or returning data)
-        console.log('API Response:', responseData);
+        console.log("API Response:", responseData);
 
         // Resolve the promise with the API response data
         resolve(JSON.parse(responseData));
       });
     });
 
-    req.on('error', (error) => {
+    req.on("error", (error) => {
       // Handle errors (e.g., logging or rejecting the promise)
-      console.error('API Error:', error.message);
+      console.error("API Error:", error.message);
 
       // Reject the promise with the error
       reject(error);

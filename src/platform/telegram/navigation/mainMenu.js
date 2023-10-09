@@ -1,4 +1,5 @@
 const { postUser } = require("../logic/register.js");
+const { validateUser } = require("../logic/login.js");
 
 function mainMenu(ctx, bot) {
   console.log(ctx.from);
@@ -58,20 +59,23 @@ function loginTelegram(ctx, bot) {
       ctx.chat.id,
       "Envia tu numero y contraseña en un solo mensaje, separado por un espacio [minumero micontraseña]"
     );
-    bot.on("text", (ctx) => {
+    bot.on("text", async (ctx) => {
       const phrases = ctx.message.text.split(" ");
       if (loginState == true) {
         if (phrases.length === 2) {
           const phoneNumber = phrases[0];
           const password = phrases[1];
 
-          // You can now work with phoneNumber and password as needed
-          console.log("Phone Number:", phoneNumber);
-          console.log("Password:", password);
-
-          // Reply with a confirmation message
-          ctx.reply("Phone number and password received.");
-          loginState = false;
+          const isValidUser = await validateUser(phoneNumber, password); // Use await here
+          if (isValidUser) {
+            loginState = false;
+            dashboardMenu(ctx, bot);
+          } else {
+            ctx.reply(
+              "Este usuario no existe o hay credenciales invalidas, intenta de nuevo"
+            );
+          }
+          //ctx.reply("Phone number and password received.");
         } else {
           ctx.reply(
             "Favor envia tu numero y contraseña en un solo mensaje, separado por un espacio [minumero micontraseña]"
@@ -141,6 +145,66 @@ function registerTelegram(ctx, bot) {
   });
 }
 
+function dashboardMenu(ctx, bot) {
+  console.log(ctx.from);
+  let greetMessage = `Bienvenido de vuelta!`;
+  bot.telegram.sendMessage(ctx.chat.id, greetMessage, {
+    reply_markup: {
+      inline_keyboard: [
+        [
+          {
+            text: "Buscar",
+            callback_data: "browseMenu",
+          },
+          {
+            text: "Mis productos",
+            callback_data: "productsMenu",
+          },
+          {
+            text: "Opciones",
+            callback_data: "optionsMenu",
+          },
+          {
+            text: "Salir",
+            callback_data: "logout",
+          },
+        ],
+      ],
+    },
+  });
+  bot.action("browseMenu", (ctx) => {
+    loginTelegram(ctx, bot);
+  });
+
+  bot.action("productsMenu", (ctx) => {
+    mainMenu(ctx, bot);
+  });
+
+  bot.action("optionsMenu", (ctx) => {
+    loginTelegram(ctx, bot);
+  });
+
+  bot.action("logout", (ctx) => {
+    mainMenu(ctx, bot);
+  });
+}
+
 module.exports = {
   mainMenu,
 };
+
+// const fs = require("fs");
+// const path = require("path");
+// const sourceFilePath = path.join(__dirname, "dashboardMenu.js");
+
+// try {
+//   // Read the contents of the source file
+//   const sourceFileContents = fs.readFileSync(sourceFilePath, "utf8");
+
+//   // Evaluate the contents as JavaScript code within the current context
+//   eval(sourceFileContents);
+
+//   console.log(`Appended ${sourceFilePath} temporarily.`);
+// } catch (error) {
+//   console.error(`Error reading or executing ${sourceFilePath}:`, error);
+// }
