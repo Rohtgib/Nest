@@ -8,6 +8,7 @@ expressApp.use(express.static("static"));
 expressApp.use(express.json());
 
 const { Telegraf } = require("telegraf");
+const session = require("telegraf-session-local");
 const { mainMenu } = require("./navigation/mainMenu");
 dotenv.config({ path: path.join(__dirname, "..", "..", ".env") });
 const bot = new Telegraf(process.env.TELEGRAM_BOT_TOKEN);
@@ -21,4 +22,5 @@ bot.command("start", (ctx) => {
   mainMenu(ctx, bot);
 });
 
+console.log(`Telegram bot running on port ${port}`);
 bot.launch();

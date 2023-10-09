@@ -10,7 +10,6 @@ createUser.post("/insert/user", async (req, res) => {
     const { email, password, phone } = req.body;
     const creation_date = new Date().toISOString();
 
-
     //TODO Change table
     const tableName = "user";
 

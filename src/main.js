@@ -1,1 +1,2 @@
-console.log("I work");
+require('./server/api.js')
+require('./platform/telegram/telegram.js')
