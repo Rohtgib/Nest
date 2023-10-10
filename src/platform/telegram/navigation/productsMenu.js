@@ -2,7 +2,14 @@ const { postProduct } = require("../logic/addProduct.js");
 const {
   getProductsbyName,
   getProductsbyUser,
+  isProductVendor,
 } = require("../logic/getProducts.js");
+const {
+  updateProductDescription,
+  updateProductName,
+  updateProductPrice,
+  updateProductStatus,
+} = require("../logic/editProducts.js");
 
 function productsMenu(ctx, bot, userID, dashboardMenu) {
   let conditionToStopHearingMessages;
@@ -60,7 +67,15 @@ function productsMenu(ctx, bot, userID, dashboardMenu) {
   });
 
   bot.action("editProduct", (ctx) => {
-    ctx.reply("Menu para edicion de productos");
+    ctx.reply(
+      "Menu para edicion de productos\nSolo debes de pasar el id del producto que deseas modificar seguido de los parametros solicitados\n\n/editname [id]_nuevo nombre - Cambia el nombre de un producto\n/editdescription [id]_nueva descripcion - Cambia la descripcion de un producto\n/editprice [id]_nuevo precio - Cambia el precio de un producto\n/sold [id] - Marca un producto como vendido\n/unlist [id] - Deslista un producto"
+    );
+  });
+
+  bot.action("addProduct", (ctx) => {
+    ctx.reply(
+      "Para agregar productos utiliza el comando /addproduct seguido del nombre, descripcion, y precio del producto, cada uno separado por guiones bajos (_)"
+    );
   });
 
   bot.command("addproduct", (ctx) => {
@@ -83,6 +98,56 @@ function productsMenu(ctx, bot, userID, dashboardMenu) {
         ctx.reply(
           "Favor inserta los datos solicitados en este formato y sin corchetes [Mi producto_mi descripcion_100]"
         );
+      }
+    }
+  });
+
+  bot.command("sold", async (ctx) => {
+    conditionToStopHearingMessages = false;
+    if (!conditionToStopHearingMessages) {
+      const input = ctx.message.text.split(" "); // Remove the command prefix and then split    console.log(input);
+      if (input.length === 2) {
+        const productID = input[1];
+        updateProductStatus(productID, 2);
+        const isVendor = await isProductVendor(ctx, productID, user);
+
+        if (!isVendor) {
+          ctx.reply("Este producto no existe en tu inventario");
+        } else {
+          registerProductState = false;
+          ctx.reply(
+            "El producto se ha registrado como vendido, revisa tu inventario"
+          );
+          ctx.deleteMessage();
+          conditionToStopHearingMessages = true;
+          // mainMenu(ctx, bot);
+        }
+      } else {
+        ctx.reply("Favor inserta los datos solicitados de forma correcta");
+      }
+    }
+  });
+
+  bot.command("unlist", async (ctx) => {
+    conditionToStopHearingMessages = false;
+    if (!conditionToStopHearingMessages) {
+      const input = ctx.message.text.split(" "); // Remove the command prefix and then split    console.log(input);
+      if (input.length === 2) {
+        const productID = input[1];
+        updateProductStatus(productID, 4);
+        const isVendor = await isProductVendor(ctx, productID, user);
+
+        if (!isVendor) {
+          ctx.reply("Este producto no existe en tu inventario");
+        } else {
+          registerProductState = false;
+          ctx.reply("El producto se deslistado de tu inventario");
+          ctx.deleteMessage();
+          conditionToStopHearingMessages = true;
+          // mainMenu(ctx, bot);
+        }
+      } else {
+        ctx.reply("Favor inserta los datos solicitados de forma correcta");
       }
     }
   });
