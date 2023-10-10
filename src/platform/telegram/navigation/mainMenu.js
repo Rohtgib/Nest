@@ -20,30 +20,14 @@ function mainMenu(ctx, bot) {
     },
   });
   bot.action("loginMenu", (ctx) => {
-    loginMenu(ctx, bot);
+    loginMenu(ctx, bot, mainMenu);
   });
 
   bot.action("registerMenu", (ctx) => {
-    registerMenu(ctx, bot);
+    registerMenu(ctx, bot, mainMenu);
   });
 }
 
 module.exports = {
   mainMenu,
 };
-
-// const fs = require("fs");
-// const path = require("path");
-// const sourceFilePath = path.join(__dirname, "dashboardMenu.js");
-
-// try {
-//   // Read the contents of the source file
-//   const sourceFileContents = fs.readFileSync(sourceFilePath, "utf8");
-
-//   // Evaluate the contents as JavaScript code within the current context
-//   eval(sourceFileContents);
-
-//   console.log(`Appended ${sourceFilePath} temporarily.`);
-// } catch (error) {
-//   console.error(`Error reading or executing ${sourceFilePath}:`, error);
-// }

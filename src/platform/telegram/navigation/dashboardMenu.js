@@ -1,3 +1,5 @@
+const { productsMenu } = require("./productsMenu.js");
+
 function dashboardMenu(ctx, bot, userID, mainMenu) {
   let greetMessage = `Bienvenido de vuelta! ${userID}`;
   bot.telegram.sendMessage(ctx.chat.id, greetMessage, {
@@ -29,7 +31,7 @@ function dashboardMenu(ctx, bot, userID, mainMenu) {
   });
 
   bot.action("productsMenu", (ctx) => {
-    ctx.reply("Logica de mis productos");
+    productsMenu(ctx, bot, userID, dashboardMenu);
   });
 
   bot.action("optionsMenu", (ctx) => {

@@ -31,13 +31,13 @@ async function validateUser(phone, password) {
       res.on("end", () => {
         try {
           // Check if the response data is empty
-          if (responseData) {
+          if (!responseData) {
             resolve(false); // No data in the response, treat as "false"
           } else {
             const response = JSON.parse(responseData);
 
             if (response.result == true) {
-              console.log("found user"); // Entry exists in the Supabase table
+              resolve(response.userId); // Entry exists in the Supabase table
             } else {
               resolve(false); // Entry does not exist in the Supabase table
             }
