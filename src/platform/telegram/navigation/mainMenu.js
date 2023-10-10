@@ -29,8 +29,6 @@ function mainMenu(ctx, bot) {
 }
 
 function loginMenu(ctx, bot) {
-  ctx.deleteMessage();
-
   let greetMessage = `Bienvenido a ShopSage`;
   ctx.deleteMessage();
   bot.telegram.sendMessage(ctx.chat.id, greetMessage, {
@@ -69,6 +67,7 @@ function loginMenu(ctx, bot) {
           const isValidUser = await validateUser(phoneNumber, password); // Use await here
           if (isValidUser) {
             loginState = false;
+            ctx.deleteMessage();
             dashboardMenu(ctx, bot);
           } else {
             ctx.reply(
@@ -90,13 +89,12 @@ function loginMenu(ctx, bot) {
   });
 
   bot.action("back", (ctx) => {
+    ctx.deleteMessage();
     mainMenu(ctx, bot);
   });
 }
 
 function registerMenu(ctx, bot) {
-  ctx.deleteMessage();
-
   let greetMessage = `Bienvenido a ShopSage`;
   ctx.deleteMessage();
   bot.telegram.sendMessage(ctx.chat.id, greetMessage, {
@@ -131,6 +129,8 @@ function registerMenu(ctx, bot) {
           postUser(emailAddress, phoneNumber, password);
           ctx.reply("Te has registrado correctamente, bienvenido a ShopSage!");
           registerState = false;
+          ctx.deleteMessage();
+
           mainMenu(ctx, bot);
         } else {
           ctx.reply(
@@ -142,6 +142,8 @@ function registerMenu(ctx, bot) {
   });
 
   bot.action("back", (ctx) => {
+    ctx.deleteMessage();
+
     mainMenu(ctx, bot);
   });
 }
@@ -173,18 +175,19 @@ function dashboardMenu(ctx, bot) {
     },
   });
   bot.action("browseMenu", (ctx) => {
-    loginMenu(ctx, bot);
+    ctx.reply("Logica de catalogo");
   });
 
   bot.action("productsMenu", (ctx) => {
-    mainMenu(ctx, bot);
+    ctx.reply("Logica de mis productos");
   });
 
   bot.action("optionsMenu", (ctx) => {
-    loginMenu(ctx, bot);
+    ctx.reply("Logica de opciones");
   });
 
   bot.action("logout", (ctx) => {
+    ctx.deleteMessage();
     mainMenu(ctx, bot);
   });
 }
