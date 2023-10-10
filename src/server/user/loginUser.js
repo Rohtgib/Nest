@@ -5,7 +5,7 @@ const loginUser = express.Router();
 loginUser.use(express.json());
 
 // Endpoint to validate user credentials
-loginUser.post("/validate/user", async (req, res) => {
+loginUser.get("/validate/user", async (req, res) => {
   try {
     const { phone, password } = req.body; // Assuming you send these values in the request body
 

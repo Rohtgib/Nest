@@ -1,19 +1,21 @@
 const http = require("http");
 
 // Define a function that makes a POST request to your Express API
-async function postUser(email, phone, password) {
+async function postProduct(name, description, price, vendor) {
   // Create the request data as a JSON string
   const requestData = JSON.stringify({
-    email: email,
-    password: password,
-    phone: phone,
+    name: name,
+    description: description,
+    price: parseFloat(price),
+    vendor: vendor,
+    status: 1,
   });
 
   // Define the request options
   const options = {
     hostname: "localhost",
     port: 8080,
-    path: "/insert/user",
+    path: "/insert/product",
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -53,4 +55,4 @@ async function postUser(email, phone, password) {
 }
 
 // Export the function so that it can be used in other files
-module.exports = { postUser };
+module.exports = { postProduct };

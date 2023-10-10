@@ -13,7 +13,7 @@ async function validateUser(phone, password) {
     hostname: "localhost",
     port: 8080,
     path: "/validate/user",
-    method: "POST",
+    method: "GET",
     headers: {
       "Content-Type": "application/json",
       "Content-Length": Buffer.byteLength(requestData),

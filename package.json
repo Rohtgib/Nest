@@ -4,9 +4,9 @@
   "description": "WhatsApp API for Ecommerce",
   "main": "main.js",
   "scripts": {
-    "main": "node src/main.js",
-    "telegram": "node src/platform/telegram/telegram.js ",
-    "api": "node src/server/api.js",
+    "main": "nodemon src/main.js",
+    "telegram": "nodemon src/platform/telegram/telegram.js ",
+    "api": "nodemon src/server/api.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -25,6 +25,10 @@
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "telegraf": "^4.14.0",
-    "telegraf-session-local": "^2.1.1"
+    "telegraf-session-local": "^2.1.1",
+    "telegraf-wizard": "^0.0.8"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
   }
 }
