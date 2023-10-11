@@ -151,19 +151,24 @@ async function getProductbyID(productID) {
   });
 }
 
-async function isProductVendor(ctx, userId, productID) {
-  const myAvailableProducts = await getProductsbyUser(userId);
+async function isProductVendor(ctx, userID) {
+  const myAvailableProducts = await getProductsbyUser(userID);
+
+  if (myAvailableProducts.products.length === 0) {
+    return false; // No products found, so the user is not the vendor
+  }
 
   // Find the product with the given ID
-  const product = myAvailableProducts.products.find((p) => p.id === productID);
+  const vendor = myAvailableProducts.products[0].vendor.id;
 
   // Check if the user's ID matches the vendor's ID
-  if (product && product.vendor.id === userId) {
+  if (vendor === userID) {
     return true; // The user is the vendor
   }
 
   return false; // The user is not the vendor
 }
+
 
 module.exports = {
   getProductsbyName,

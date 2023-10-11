@@ -2,7 +2,7 @@ const { productsMenu } = require("./productsMenu.js");
 
 function dashboardMenu(ctx, bot, userID, mainMenu) {
   user = userID;
-  let greetMessage = `Bienvenido de vuelta! ${userID}`;
+  let greetMessage = `Bienvenido de vuelta a ShopSage`;
   bot.telegram.sendMessage(ctx.chat.id, greetMessage, {
     reply_markup: {
       inline_keyboard: [

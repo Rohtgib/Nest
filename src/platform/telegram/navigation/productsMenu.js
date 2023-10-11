@@ -14,7 +14,7 @@ const {
 function productsMenu(ctx, bot, userID, dashboardMenu) {
   let conditionToStopHearingMessages;
   user = userID;
-  let greetMessage = `Vista general de productos de usuario ${user}`;
+  let greetMessage = `Vista general de productos de usuario`;
   bot.telegram.sendMessage(ctx.chat.id, greetMessage, {
     reply_markup: {
       inline_keyboard: [
@@ -51,7 +51,7 @@ function productsMenu(ctx, bot, userID, dashboardMenu) {
       for (let i = 0; i < myAvailableProducts.products.length; i++) {
         const product = myAvailableProducts.products[i];
         if (product.status && product.status.status_type === "Disponible") {
-          availableProductsString += `Producto ${i + 1}:\n`;
+          availableProductsString += `Producto ${product.id}:\n`;
           availableProductsString += `Nombre: ${product.name}\n`;
           availableProductsString += `Descripcion: ${
             product.description || "N/A"
@@ -76,6 +76,84 @@ function productsMenu(ctx, bot, userID, dashboardMenu) {
     ctx.reply(
       "Para agregar productos utiliza el comando /addproduct seguido del nombre, descripcion, y precio del producto, cada uno separado por guiones bajos (_)"
     );
+  });
+
+  bot.command("editname", async (ctx) => {
+    conditionToStopHearingMessages = false;
+    if (!conditionToStopHearingMessages) {
+      const input = ctx.message.text.replace(/^\/editname\s+/i, "").split("_");
+      if (input.length === 2) {
+        const productID = input[0];
+        const productName = input[1];
+        const isVendor = await isProductVendor(ctx, user);
+        console.log(isVendor);
+        if (!isVendor) {
+          ctx.reply("Este producto no existe en tu inventario");
+        } else {
+          updateProductName(productID, productName);
+          ctx.reply(
+            "Se ha modificado el nombre del producto, revisa tu inventario"
+          );
+          ctx.deleteMessage();
+          conditionToStopHearingMessages = true;
+          // mainMenu(ctx, bot);
+        }
+      } else {
+        ctx.reply("Favor inserta los datos solicitados de forma correcta");
+      }
+    }
+  });
+
+  bot.command("editdescription", async (ctx) => {
+    conditionToStopHearingMessages = false;
+    if (!conditionToStopHearingMessages) {
+      const input = ctx.message.text
+        .replace(/^\/editdescription\s+/i, "")
+        .split("_");
+      if (input.length === 2) {
+        const productID = input[0];
+        const productDescription = input[1];
+        const isVendor = await isProductVendor(ctx, user);
+        if (!isVendor) {
+          ctx.reply("Este producto no existe en tu inventario");
+        } else {
+          updateProductDescription(productID, productDescription);
+          ctx.reply(
+            "Se ha modificado la descripcion del producto, revisa tu inventario"
+          );
+          ctx.deleteMessage();
+          conditionToStopHearingMessages = true;
+          // mainMenu(ctx, bot);
+        }
+      } else {
+        ctx.reply("Favor inserta los datos solicitados de forma correcta");
+      }
+    }
+  });
+
+  bot.command("editprice", async (ctx) => {
+    conditionToStopHearingMessages = false;
+    if (!conditionToStopHearingMessages) {
+      const input = ctx.message.text.replace(/^\/editprice\s+/i, "").split("_");
+      if (input.length === 2) {
+        const productID = input[0];
+        const productPrice = input[1];
+        const isVendor = await isProductVendor(ctx, user);
+        if (!isVendor) {
+          ctx.reply("Este producto no existe en tu inventario");
+        } else {
+          updateProductPrice(productID, productPrice);
+          ctx.reply(
+            "Se ha modificado el precio del producto, revisa tu inventario"
+          );
+          ctx.deleteMessage();
+          conditionToStopHearingMessages = true;
+          // mainMenu(ctx, bot);
+        }
+      } else {
+        ctx.reply("Favor inserta los datos solicitados de forma correcta");
+      }
+    }
   });
 
   bot.command("addproduct", (ctx) => {
@@ -108,13 +186,12 @@ function productsMenu(ctx, bot, userID, dashboardMenu) {
       const input = ctx.message.text.split(" "); // Remove the command prefix and then split    console.log(input);
       if (input.length === 2) {
         const productID = input[1];
-        updateProductStatus(productID, 2);
-        const isVendor = await isProductVendor(ctx, productID, user);
-
+        const isVendor = await isProductVendor(ctx, user);
         if (!isVendor) {
           ctx.reply("Este producto no existe en tu inventario");
         } else {
           registerProductState = false;
+          updateProductStatus(productID, 2);
           ctx.reply(
             "El producto se ha registrado como vendido, revisa tu inventario"
           );
@@ -134,13 +211,14 @@ function productsMenu(ctx, bot, userID, dashboardMenu) {
       const input = ctx.message.text.split(" "); // Remove the command prefix and then split    console.log(input);
       if (input.length === 2) {
         const productID = input[1];
-        updateProductStatus(productID, 4);
-        const isVendor = await isProductVendor(ctx, productID, user);
+        const isVendor = await isProductVendor(ctx, user);
 
         if (!isVendor) {
           ctx.reply("Este producto no existe en tu inventario");
         } else {
           registerProductState = false;
+          updateProductStatus(productID, 4);
+
           ctx.reply("El producto se deslistado de tu inventario");
           ctx.deleteMessage();
           conditionToStopHearingMessages = true;
