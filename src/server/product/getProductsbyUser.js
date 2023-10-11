@@ -23,13 +23,13 @@ router.get("/get/userproducts", async (req, res) => {
     }
 
     const products = data || []; // Initialize products as an empty array
-    let vendor = null;
+    let vendorID = null;
 
     if (products.length > 0) {
-      vendor = products[0].vendor; // Get the vendor ID from the first product (assuming "vendor" field contains user ID)
+      vendorID = products[0].vendor.id; // Get the vendor ID from the first product (assuming "vendor" field contains user ID)
     }
 
-    res.json({ products});
+    res.json({ products, vendorID });
   } catch (error) {
     console.error("Error retrieving user products:", error.message);
     res.status(500).json({ error: "An error occurred" });

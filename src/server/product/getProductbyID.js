@@ -12,7 +12,7 @@ router.get("/get/products/filter/id", async (req, res) => {
     const { data, error } = await supabase
       .from("product")
       .select(
-        "id,name,description,price,vendor: user(email,phone),status: product_status(status_type)"
+        "id,name,description,price,vendor: user(id,email,phone),status: product_status(status_type)"
       )
       .eq("id", id);
 

@@ -85,7 +85,7 @@ function productsMenu(ctx, bot, userID, dashboardMenu) {
       if (input.length === 2) {
         const productID = input[0];
         const productName = input[1];
-        const isVendor = await isProductVendor(ctx, user);
+        const isVendor = await isProductVendor(ctx, user, productID);
         console.log(isVendor);
         if (!isVendor) {
           ctx.reply("Este producto no existe en tu inventario");
@@ -113,7 +113,7 @@ function productsMenu(ctx, bot, userID, dashboardMenu) {
       if (input.length === 2) {
         const productID = input[0];
         const productDescription = input[1];
-        const isVendor = await isProductVendor(ctx, user);
+        const isVendor = await isProductVendor(ctx, user, productID);
         if (!isVendor) {
           ctx.reply("Este producto no existe en tu inventario");
         } else {
@@ -138,7 +138,7 @@ function productsMenu(ctx, bot, userID, dashboardMenu) {
       if (input.length === 2) {
         const productID = input[0];
         const productPrice = input[1];
-        const isVendor = await isProductVendor(ctx, user);
+        const isVendor = await isProductVendor(ctx, user, productID);
         if (!isVendor) {
           ctx.reply("Este producto no existe en tu inventario");
         } else {
@@ -186,7 +186,7 @@ function productsMenu(ctx, bot, userID, dashboardMenu) {
       const input = ctx.message.text.split(" "); // Remove the command prefix and then split    console.log(input);
       if (input.length === 2) {
         const productID = input[1];
-        const isVendor = await isProductVendor(ctx, user);
+        const isVendor = await isProductVendor(ctx, user, productID);
         if (!isVendor) {
           ctx.reply("Este producto no existe en tu inventario");
         } else {
@@ -211,7 +211,7 @@ function productsMenu(ctx, bot, userID, dashboardMenu) {
       const input = ctx.message.text.split(" "); // Remove the command prefix and then split    console.log(input);
       if (input.length === 2) {
         const productID = input[1];
-        const isVendor = await isProductVendor(ctx, user);
+        const isVendor = await isProductVendor(ctx, user, productID);
 
         if (!isVendor) {
           ctx.reply("Este producto no existe en tu inventario");
