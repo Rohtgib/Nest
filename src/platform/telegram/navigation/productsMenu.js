@@ -1,6 +1,5 @@
 const { postProduct } = require("../logic/addProduct.js");
 const {
-  getProductsbyName,
   getProductsbyUser,
   isProductVendor,
 } = require("../logic/getProducts.js");

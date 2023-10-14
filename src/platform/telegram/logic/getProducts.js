@@ -1,5 +1,55 @@
 const http = require("http");
 
+async function getRecentProducts() {
+  const requestData = JSON.stringify({
+  });
+
+  const options = {
+    hostname: "localhost",
+    port: 8080,
+    path: "/get/products/recent",
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      "Content-Length": Buffer.byteLength(requestData),
+    },
+  };
+
+  return new Promise((resolve, reject) => {
+    const req = http.request(options, (res) => {
+      let responseData = "";
+
+      res.on("data", (chunk) => {
+        responseData += chunk;
+      });
+
+      res.on("end", () => {
+        try {
+          // Check if the response data is empty
+          if (!responseData) {
+            resolve(false); // No data in the response, treat as "false"
+          } else {
+            const response = JSON.parse(responseData);
+            resolve(response); // Entry exists in the Supabase table
+          }
+        } catch (error) {
+          console.error("Error parsing response:", error.message);
+          reject(error);
+        }
+      });
+    });
+
+    req.on("error", (error) => {
+      console.error("API Error:", error.message);
+      reject(error);
+    });
+
+    // Send the request data
+    req.write(requestData);
+    req.end();
+  });
+}
+
 async function getProductsbyName(name) {
   const requestData = JSON.stringify({
     name: name,
@@ -172,6 +222,7 @@ async function isProductVendor(ctx, userID, productID) {
 }
 
 module.exports = {
+  getRecentProducts,
   getProductsbyName,
   getProductsbyUser,
   getProductbyID,

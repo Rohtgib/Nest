@@ -1,3 +1,4 @@
+const { catalogMenu } = require("./catalogMenu.js");
 const { productsMenu } = require("./productsMenu.js");
 
 function dashboardMenu(ctx, bot, userID, mainMenu) {
@@ -8,8 +9,8 @@ function dashboardMenu(ctx, bot, userID, mainMenu) {
       inline_keyboard: [
         [
           {
-            text: "Buscar",
-            callback_data: "browseMenu",
+            text: "Catalogo",
+            callback_data: "catalogMenu",
           },
           {
             text: "Mis productos",
@@ -27,8 +28,8 @@ function dashboardMenu(ctx, bot, userID, mainMenu) {
       ],
     },
   });
-  bot.action("browseMenu", (ctx) => {
-    ctx.reply("Logica de catalogo");
+  bot.action("catalogMenu", (ctx) => {
+    catalogMenu(ctx,bot,user, dashboardMenu)
   });
 
   bot.action("productsMenu", (ctx) => {
