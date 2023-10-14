@@ -1,4 +1,8 @@
-const { getRecentProducts, getProductbyID } = require("../logic/getProducts");
+const {
+  getRecentProducts,
+  getProductbyID,
+  getProductsbyName,
+} = require("../logic/getProducts");
 
 function catalogMenu(ctx, bot, userID, dashboardMenu) {
   user = userID;
@@ -64,7 +68,6 @@ function catalogMenu(ctx, bot, userID, dashboardMenu) {
           const product = await getProductbyID(productID);
           const productData = product.products[0];
           const vendor = productData.vendor;
-          const status = productData.status;
 
           // Product information is available
           const productDetailString = `
@@ -75,8 +78,6 @@ function catalogMenu(ctx, bot, userID, dashboardMenu) {
           - Número de teléfono: ${vendor.phone || "No disponible"}\n
           - Correo electrónico: ${vendor.email || "No disponible"}
           `;
-          
-          
 
           ctx.reply(productDetailString);
         } catch (error) {
@@ -88,9 +89,40 @@ function catalogMenu(ctx, bot, userID, dashboardMenu) {
       }
     }
   });
+
+  bot.command("browse", async (ctx) => {
+    let availableProductsString = "";
+    conditionToStopHearingMessages = false;
+    if (!conditionToStopHearingMessages) {
+      const input = ctx.message.text.replace(/^\/browse\s+/i, "");
+      try {
+        const searchResult = await getProductsbyName(input);
+        if (searchResult.products.length === 0) {
+          ctx.reply("No se han encontrado productos");
+        } else {
+          for (let i = 0; i < searchResult.products.length; i++) {
+            const product = searchResult.products[i];
+            if (product.status && product.status.status_type === "Disponible") {
+              availableProductsString += `Producto ${product.id}:\n`;
+              availableProductsString += `Nombre: ${product.name}\n`;
+              availableProductsString += `Descripcion: ${
+                product.description || "N/A"
+              }\n`;
+              availableProductsString += `Precio: RD$${product.price}\n`;
+              availableProductsString += "------------------------\n";
+            }
+          }
+          productsList = "Resultado de busqueda\n------------------------\n";
+          productsList += availableProductsString;
+          ctx.reply(productsList);
+        }
+      } catch (error) {
+        console.log(error);
+        ctx.reply("Ha ocurrido un error");
+      }
+    }
+  });
 }
-
-
 
 module.exports = {
   catalogMenu,
