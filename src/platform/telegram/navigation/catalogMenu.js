@@ -17,7 +17,7 @@ function catalogMenu(ctx, bot, userID, dashboardMenu) {
           },
           {
             text: "Buscar producto por nombre",
-            callback_data: "productsMenu",
+            callback_data: "browseHelp",
           },
           {
             text: "Expandir informacion sobre un producto",
@@ -57,6 +57,14 @@ function catalogMenu(ctx, bot, userID, dashboardMenu) {
       ctx.reply(productsList);
     }
   });
+
+bot.action("browseHelp", (ctx) => {
+	ctx.reply("Para buscar un producto por su nombre utiliza el comando /browse seguido de el nombre");
+});
+
+bot.action("expandCommand", (ctx) => {
+	ctx.reply("Para expandir la informacion de un producto utiliza el comando /expand seguido del ID de producto");
+});
 
   bot.command("expand", async (ctx) => {
     conditionToStopHearingMessages = false;
