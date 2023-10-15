@@ -5,12 +5,10 @@ const router = express.Router();
 
 router.use(express.json());
 
-// Endpoint to get products by user ID
 router.get("/get/userproducts", async (req, res) => {
   try {
-    const { id } = req.body; // Assuming you send the user's ID in the request body
+    const { id } = req.body;
 
-    // Query the "product" table for products by the vendor's ID
     const { data, error } = await supabase
       .from("product")
       .select(
@@ -22,11 +20,11 @@ router.get("/get/userproducts", async (req, res) => {
       throw error;
     }
 
-    const products = data || []; // Initialize products as an empty array
+    const products = data || [];
     let vendorID = null;
 
     if (products.length > 0) {
-      vendorID = products[0].vendor.id; // Get the vendor ID from the first product (assuming "vendor" field contains user ID)
+      vendorID = products[0].vendor.id;
     }
 
     res.json({ products, vendorID });

@@ -7,7 +7,7 @@ router.use(express.json());
 
 router.get("/get/products/filter/id", async (req, res) => {
   try {
-    const { id } = req.body; // Assuming you send the user's ID in the request body
+    const { id } = req.body;
 
     const { data, error } = await supabase
       .from("product")
@@ -29,7 +29,7 @@ router.get("/get/products/filter/id", async (req, res) => {
 
     res.json({ products, id });
   } catch (error) {
-    console.error("Error retrieving user products:", error.message);
+    console.error("Error retrieving products:", error.message);
     res.status(500).json({ error: "An error occurred" });
   }
 });

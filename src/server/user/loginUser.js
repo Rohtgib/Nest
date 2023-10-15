@@ -4,10 +4,9 @@ const { supabase } = require("../supabase");
 const loginUser = express.Router();
 loginUser.use(express.json());
 
-// Endpoint to validate user credentials
 loginUser.get("/validate/user", async (req, res) => {
   try {
-    const { phone, password } = req.body; // Assuming you send these values in the request body
+    const { phone, password } = req.body;
 
     const { data, error } = await supabase
       .from("user")
@@ -19,16 +18,16 @@ loginUser.get("/validate/user", async (req, res) => {
       throw error;
     }
 
-    const entryExists = data.length > 0; // Check if any data was returned
+    const entryExists = data.length > 0;
     let userId = null;
 
     if (entryExists) {
-      userId = data[0].id; // Get the id of the first matching user
+      userId = data[0].id;
     }
 
-    res.json({ result: entryExists, userId: userId });
+    res.json({ userFound: entryExists, userId: userId });
   } catch (error) {
-    console.error("Error checking entry:", error.message);
+    console.error("Error validating login:", error.message);
     res.status(500).json({ error: "An error occurred" });
   }
 });

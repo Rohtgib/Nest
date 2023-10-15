@@ -5,12 +5,10 @@ const router = express.Router();
 
 router.use(express.json());
 
-// Endpoint to get products by user ID
 router.get("/get/products/filter/name", async (req, res) => {
   try {
-    const { name } = req.body; // Assuming you send the user's ID in the request body
+    const { name } = req.body;
 
-    // Query the "product" table for products by the vendor's ID
     const { data, error } = await supabase
       .from("product")
       .select(
@@ -22,11 +20,11 @@ router.get("/get/products/filter/name", async (req, res) => {
       throw error;
     }
 
-    const products = data || []; // Initialize products as an empty array
+    const products = data || [];
 
     res.json({ products, name });
   } catch (error) {
-    console.error("Error retrieving user products:", error.message);
+    console.error("Error retrieving products:", error.message);
     res.status(500).json({ error: "An error occurred" });
   }
 });
