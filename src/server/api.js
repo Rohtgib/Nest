@@ -1,4 +1,5 @@
 const express = require("express");
+const cors = require("cors");
 const fs = require("fs");
 const dotenv = require("dotenv");
 const path = require("path");
@@ -34,6 +35,8 @@ myModuleDirs.forEach((dir) => {
     console.error(`Module directory ${myModuleDirPath} not found. Skipping...`);
   }
 });
+
+app.use(cors());
 
 app.listen(process.env.EXPRESS_PORT, () => {
   console.log(`Server running on port ${process.env.EXPRESS_PORT}`);

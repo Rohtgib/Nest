@@ -6,7 +6,7 @@ createReport.use(express.json());
 
 createReport.post("/insert/report", async (req, res) => {
   try {
-    const { product, reporter, reason } = req.body;
+    const { product, reporter, reason } = req.query;
     const report_date = new Date().toISOString();
 
     const tableName = "report";

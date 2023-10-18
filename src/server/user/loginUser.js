@@ -6,7 +6,7 @@ validateUser.use(express.json());
 
 validateUser.get("/validate/user", async (req, res) => {
   try {
-    const { phone, password } = req.body;
+    const { phone, password } = req.query;
 
     const { data, error } = await supabase
       .from("user")
@@ -19,13 +19,13 @@ validateUser.get("/validate/user", async (req, res) => {
     }
 
     const entryExists = data.length > 0;
-    let userId = null;
+    let userID = null;
 
     if (entryExists) {
-      userId = data[0].id;
+      userID = data[0].id;
     }
 
-    res.json({ result: entryExists, userId: userId });
+    res.json({ result: entryExists, userID: userID });
   } catch (error) {
     console.error("Error checking entry:", error.message);
     res.status(500).json({ error: "An error occurred" });

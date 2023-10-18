@@ -6,7 +6,7 @@ createUser.use(express.json());
 
 createUser.post("/insert/user", async (req, res) => {
   try {
-    const { email, password, phone } = req.body;
+    const { email, password, phone } = req.query;
     const creation_date = new Date().toISOString();
 
     const tableName = "user";

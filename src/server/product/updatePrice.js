@@ -6,7 +6,7 @@ updateEmail.use(express.json());
 
 updateEmail.post("/update/price", async (req, res) => {
   try {
-    const { id, price } = req.body;
+    const { id, price } = req.query;
     const tableName = "product";
     const filter = { id: id };
 

@@ -7,7 +7,7 @@ router.use(express.json());
 
 router.get("/get/products/filter/id", async (req, res) => {
   try {
-    const { id } = req.body;
+    const { id } = req.query;
 
     const { data, error } = await supabase
       .from("product")
