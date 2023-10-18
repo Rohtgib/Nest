@@ -1,19 +1,19 @@
-const { postProduct } = require("../logic/addProduct.js");
+const { postProduct } = require("../../logic/addProduct.js");
 const {
   getProductsbyUser,
   isProductVendor,
-} = require("../logic/getProducts.js");
+} = require("../../logic/getProducts.js");
 const {
   updateProductDescription,
   updateProductName,
   updateProductPrice,
   updateProductStatus,
-} = require("../logic/editProducts.js");
+} = require("../../logic/editProducts.js");
 
 function productsMenu(ctx, bot, userID, dashboardMenu) {
   let conditionToStopHearingMessages;
   user = userID;
-  let greetMessage = `Vista general de productos de usuario`;
+  let greetMessage = `Mis productos`;
   bot.telegram.sendMessage(ctx.chat.id, greetMessage, {
     reply_markup: {
       inline_keyboard: [

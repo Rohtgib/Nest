@@ -1,18 +1,18 @@
 const express = require("express");
 const fs = require("fs");
+const dotenv = require("dotenv");
 const path = require("path");
 
-const app = express();
-const port = 8080;
+dotenv.config({ path: path.join(__dirname, "..", ".env") });
 
-// Define the directories containing the modules
+const app = express();
+
 const myModuleDirs = ["product", "report", "user"];
 
 myModuleDirs.forEach((dir) => {
   const myModuleDirPath = path.join(__dirname, dir);
 
   if (fs.existsSync(myModuleDirPath)) {
-    // Get the directory contents
     const files = fs.readdirSync(myModuleDirPath);
 
     files.forEach((file) => {
@@ -35,6 +35,6 @@ myModuleDirs.forEach((dir) => {
   }
 });
 
-app.listen(port, () => {
-  console.log(`Server running on port ${port}`);
+app.listen(process.env.EXPRESS_PORT, () => {
+  console.log(`Server running on port ${process.env.EXPRESS_PORT}`);
 });

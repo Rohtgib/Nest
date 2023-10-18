@@ -2,7 +2,7 @@ const {
   getRecentProducts,
   getProductbyID,
   getProductsbyName,
-} = require("../logic/getProducts");
+} = require("../../logic/getProducts");
 
 function catalogMenu(ctx, bot, userID, dashboardMenu) {
   user = userID;
@@ -129,6 +129,10 @@ bot.action("expandCommand", (ctx) => {
         ctx.reply("Ha ocurrido un error");
       }
     }
+  });
+
+  bot.action("backtoDashboard", (ctx) => {
+    dashboardMenu(ctx, bot, user);
   });
 }
 

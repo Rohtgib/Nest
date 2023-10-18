@@ -1,8 +1,7 @@
 const http = require("http");
+const dotenv = require("dotenv");
 
-// Define a function that makes a POST request to your Express API
 async function postProduct(name, description, price, vendor) {
-  // Create the request data as a JSON string
   const requestData = JSON.stringify({
     name: name,
     description: description,
@@ -11,7 +10,6 @@ async function postProduct(name, description, price, vendor) {
     status: 1,
   });
 
-  // Define the request options
   const options = {
     hostname: "localhost",
     port: 8080,
@@ -32,27 +30,21 @@ async function postProduct(name, description, price, vendor) {
       });
 
       res.on("end", () => {
-        // Handle the API response here (e.g., logging or returning data)
         console.log("API Response:", responseData);
 
-        // Resolve the promise with the API response data
         resolve(JSON.parse(responseData));
       });
     });
 
     req.on("error", (error) => {
-      // Handle errors (e.g., logging or rejecting the promise)
       console.error("API Error:", error.message);
 
-      // Reject the promise with the error
       reject(error);
     });
 
-    // Send the request data
     req.write(requestData);
     req.end();
   });
 }
 
-// Export the function so that it can be used in other files
 module.exports = { postProduct };

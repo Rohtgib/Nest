@@ -5,7 +5,7 @@ const router = express.Router();
 
 router.use(express.json());
 
-router.get("/get/userproducts", async (req, res) => {
+router.get("/get/products/filter/user", async (req, res) => {
   try {
     const { id } = req.body;
 

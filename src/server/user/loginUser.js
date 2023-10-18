@@ -1,10 +1,10 @@
 const express = require("express");
 const { supabase } = require("../supabase");
 
-const loginUser = express.Router();
-loginUser.use(express.json());
+const validateUser = express.Router();
+validateUser.use(express.json());
 
-loginUser.get("/validate/user", async (req, res) => {
+validateUser.get("/validate/user", async (req, res) => {
   try {
     const { phone, password } = req.body;
 
@@ -25,11 +25,11 @@ loginUser.get("/validate/user", async (req, res) => {
       userId = data[0].id;
     }
 
-    res.json({ userFound: entryExists, userId: userId });
+    res.json({ result: entryExists, userId: userId });
   } catch (error) {
-    console.error("Error validating login:", error.message);
+    console.error("Error checking entry:", error.message);
     res.status(500).json({ error: "An error occurred" });
   }
 });
 
-module.exports = loginUser;
+module.exports = validateUser;

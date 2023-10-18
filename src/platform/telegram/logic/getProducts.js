@@ -108,7 +108,7 @@ async function getProductsbyUser(userID) {
   const options = {
     hostname: "localhost",
     port: 8080,
-    path: "/get/userproducts",
+    path: "/get/products/filter/user",
     method: "GET",
     headers: {
       "Content-Type": "application/json",

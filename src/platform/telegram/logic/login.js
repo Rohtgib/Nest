@@ -1,14 +1,11 @@
 const http = require("http");
 
-// Define a function that makes a POST request to your Express API
 async function validateUser(phone, password) {
-  // Create the request data as a JSON string
   const requestData = JSON.stringify({
     phone: phone,
     password: password,
   });
 
-  // Define the request options
   const options = {
     hostname: "localhost",
     port: 8080,
@@ -30,16 +27,15 @@ async function validateUser(phone, password) {
 
       res.on("end", () => {
         try {
-          // Check if the response data is empty
           if (!responseData) {
-            resolve(false); // No data in the response, treat as "false"
+            resolve(false);
           } else {
             const response = JSON.parse(responseData);
 
             if (response.result == true) {
-              resolve(response.userId); // Entry exists in the Supabase table
+              resolve(response.userId);
             } else {
-              resolve(false); // Entry does not exist in the Supabase table
+              resolve(false);
             }
           }
         } catch (error) {
@@ -54,11 +50,9 @@ async function validateUser(phone, password) {
       reject(error);
     });
 
-    // Send the request data
     req.write(requestData);
     req.end();
   });
 }
 
-// Export the function so that it can be used in other files
 module.exports = { validateUser };
