@@ -1,7 +1,7 @@
 const { loginMenu } = require("./loginMenu.js");
 const { registerMenu } = require("./registerMenu.js");
 
-function mainMenu(ctx, bot) {
+async function mainMenu(ctx, bot) {
   let greetMessage = `ShopSage's Telegram bot integration`;
   bot.telegram.sendMessage(ctx.chat.id, greetMessage, {
     reply_markup: {

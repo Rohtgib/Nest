@@ -1,14 +1,14 @@
-const { postProduct } = require("../../logic/addProduct.js");
+const { postProduct } = require("../../../../logic/addProduct.js");
 const {
   getProductsbyUser,
   isProductVendor,
-} = require("../../logic/getProducts.js");
+} = require("../../../../logic/getProducts.js");
 const {
   updateProductDescription,
   updateProductName,
   updateProductPrice,
   updateProductStatus,
-} = require("../../logic/editProducts.js");
+} = require("../../../../logic/editProducts.js");
 
 function productsMenu(ctx, bot, userID, dashboardMenu) {
   let conditionToStopHearingMessages;

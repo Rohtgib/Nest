@@ -1,4 +1,4 @@
-const { postUser } = require("../../logic/register.js");
+const { userRegister } = require("../../../../logic/userAuthentication");
 
 function registerMenu(ctx, bot, mainMenu) {
   let greetMessage = `Create a ShopSage account: /register [email] [phone] [password]`;
@@ -23,7 +23,7 @@ function registerMenu(ctx, bot, mainMenu) {
       const emailAddress = input[0];
       const phoneNumber = input[1];
       const password = input[2];
-      postUser(emailAddress, phoneNumber, password);
+      userRegister(emailAddress, phoneNumber, password);
       ctx.reply("Register successful, welcome to ShopSage!");
       ctx.deleteMessage();
     } else {

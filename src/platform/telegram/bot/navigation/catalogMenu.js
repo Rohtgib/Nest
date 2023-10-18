@@ -2,7 +2,7 @@ const {
   getRecentProducts,
   getProductbyID,
   getProductsbyName,
-} = require("../../logic/getProducts");
+} = require("../../../../logic/getProducts");
 
 function catalogMenu(ctx, bot, userID, dashboardMenu) {
   user = userID;

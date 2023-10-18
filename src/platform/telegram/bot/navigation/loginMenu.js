@@ -1,4 +1,4 @@
-const { validateUser } = require("../../logic/login.js");
+const { userLogin } = require("../../../../logic/userAuthentication");
 const { dashboardMenu } = require("./dashboardMenu.js");
 function loginMenu(ctx, bot, mainMenu) {
   let greetMessage = `Login to an existing ShopSage account: /login [phone] [password]`;
@@ -22,16 +22,15 @@ function loginMenu(ctx, bot, mainMenu) {
     if (input.length === 2) {
       const phoneNumber = input[0];
       const password = input[1];
-      const isValidUser = await validateUser(phoneNumber, password);
-      if (isValidUser != false) {
+      const loginResult = await userLogin(phoneNumber, password);
+      if (loginResult.result != false) {
         ctx.deleteMessage();
-        dashboardMenu(ctx, bot, isValidUser, mainMenu);
+        dashboardMenu(ctx, bot, loginResult.userID, mainMenu);
       } else {
         ctx.reply(
           "This user doesn't exist or you provided incorrect credentials, please try again."
         );
       }
-      //ctx.reply("Phone number and password received.");
     } else {
       ctx.reply("Please use the command as shown: /login [phone] [password]");
     }
