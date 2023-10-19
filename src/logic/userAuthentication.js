@@ -1,4 +1,3 @@
-const http = require("http");
 const { server } = require("../server/axios");
 
 async function userLogin(phone, password) {
@@ -17,16 +16,16 @@ async function userLogin(phone, password) {
 
 async function userRegister(email, phone, password) {
   try {
-    await server.post("insert/user", {
-      params: {
-        email: email,
-        password: password,
-        phone: phone,
-      },
+    const response = await server.post("insert/user", {
+      email: email,
+      password: password,
+      phone: phone,
     });
+    return response.data;
   } catch (error) {
-    console.error("Error", error.message);
+    console.error("Error:", error.message);
   }
 }
+
 
 module.exports = { userLogin, userRegister };

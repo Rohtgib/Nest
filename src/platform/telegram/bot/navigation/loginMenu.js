@@ -2,7 +2,6 @@ const { userLogin } = require("../../../../logic/userAuthentication");
 const { dashboardMenu } = require("./dashboardMenu.js");
 function loginMenu(ctx, bot, mainMenu) {
   let greetMessage = `Login to an existing ShopSage account: /login [phone] [password]`;
-  ctx.deleteMessage();
   bot.telegram.sendMessage(ctx.chat.id, greetMessage, {
     reply_markup: {
       inline_keyboard: [
@@ -23,7 +22,7 @@ function loginMenu(ctx, bot, mainMenu) {
       const phoneNumber = input[0];
       const password = input[1];
       const loginResult = await userLogin(phoneNumber, password);
-      if (loginResult.result != false) {
+      if (loginResult.result) {
         ctx.deleteMessage();
         dashboardMenu(ctx, bot, loginResult.userID, mainMenu);
       } else {

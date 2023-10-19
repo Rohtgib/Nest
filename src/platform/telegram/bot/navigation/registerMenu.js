@@ -2,7 +2,6 @@ const { userRegister } = require("../../../../logic/userAuthentication");
 
 function registerMenu(ctx, bot, mainMenu) {
   let greetMessage = `Create a ShopSage account: /register [email] [phone] [password]`;
-  ctx.deleteMessage();
   bot.telegram.sendMessage(ctx.chat.id, greetMessage, {
     reply_markup: {
       inline_keyboard: [
@@ -15,7 +14,7 @@ function registerMenu(ctx, bot, mainMenu) {
       ],
     },
   });
-  bot.command("register", (ctx) => {
+  bot.command("register", async (ctx) => {
     const input = ctx.message.text.split(" ");
     input.shift();
 
@@ -23,9 +22,20 @@ function registerMenu(ctx, bot, mainMenu) {
       const emailAddress = input[0];
       const phoneNumber = input[1];
       const password = input[2];
-      userRegister(emailAddress, phoneNumber, password);
-      ctx.reply("Register successful, welcome to ShopSage!");
-      ctx.deleteMessage();
+      const registerResult = await userRegister(
+        emailAddress,
+        phoneNumber,
+        password
+      );
+      console.log(registerResult);
+      if (registerResult) {
+        ctx.deleteMessage();
+        ctx.reply("Register successful, welcome to ShopSage!");
+      } else {
+        ctx.reply(
+          "Couldn't register your user in ShopSage, make sure the email or phone supplied is not being used"
+        );
+      }
     } else {
       ctx.reply(
         "Please use the command as shown: /register [email] [phone] [password]"

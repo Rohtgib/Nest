@@ -6,7 +6,7 @@ createUser.use(express.json());
 
 createUser.post("/insert/user", async (req, res) => {
   try {
-    const { email, password, phone } = req.query;
+    const { email, password, phone } = req.body;
     const creation_date = new Date().toISOString();
 
     const tableName = "user";
@@ -18,15 +18,16 @@ createUser.post("/insert/user", async (req, res) => {
       creation_date: creation_date,
     };
 
-    const insertedData = await insertData(tableName, data);
+    await insertData(tableName, data);
+    result = true;
 
     res.status(200).json({
       message: "User/s created successfully",
-      data: insertedData,
+      result: result,
     });
   } catch (error) {
-    console.error("Error creating user/s:", error.message);
-    res.status(500).json({ error: "An error occurred" });
+    result = false;
+    res.status(500).json({ error: error.message, result: result });
   }
 });
 
