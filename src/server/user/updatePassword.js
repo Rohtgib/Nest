@@ -6,7 +6,7 @@ updatePassword.use(express.json());
 
 updatePassword.post("/update/password", async (req, res) => {
   try {
-    const { phone, password } = req.query;
+    const { phone, password } = req.body;
     const tableName = "user";
     const filter = { phone: phone };
 

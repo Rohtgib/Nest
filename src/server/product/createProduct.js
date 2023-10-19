@@ -6,7 +6,7 @@ createProduct.use(express.json());
 
 createProduct.post("/insert/product", async (req, res) => {
   try {
-    const { name, description, price, vendor } = req.query;
+    const { name, description, price, vendor } = req.body;
     // Set status as available
     const status = 1;
 
