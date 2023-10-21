@@ -13,25 +13,25 @@ const {
 function productsMenu(ctx, bot, userID, dashboardMenu) {
   let conditionToStopHearingMessages;
   user = userID;
-  let greetMessage = `Mis productos`;
+  let greetMessage = `My products`;
   bot.telegram.sendMessage(ctx.chat.id, greetMessage, {
     reply_markup: {
       inline_keyboard: [
         [
           {
-            text: "Ver mis productos disponibles",
+            text: "Browse my products for sale",
             callback_data: "availableProducts",
           },
           {
-            text: "Editar producto",
+            text: "Edit product information",
             callback_data: "editProduct",
           },
           {
-            text: "Agregar producto",
+            text: "Add new product",
             callback_data: "addProduct",
           },
           {
-            text: "Atras",
+            text: "Go back",
             callback_data: "backtoDashboard",
           },
         ],
@@ -43,23 +43,21 @@ function productsMenu(ctx, bot, userID, dashboardMenu) {
     let availableProductsString = "";
     var myAvailableProducts = await getProductsbyUser(user);
     if (myAvailableProducts.products.length === 0) {
-      ctx.reply(
-        "No tienes productos disponibles en tu inventario, agregalos y empieza comerciar"
-      );
+      ctx.reply("You have no products for sale");
     } else {
       for (let i = 0; i < myAvailableProducts.products.length; i++) {
         const product = myAvailableProducts.products[i];
         if (product.status && product.status.status_type === "Disponible") {
-          availableProductsString += `Producto ${product.id}:\n`;
-          availableProductsString += `Nombre: ${product.name}\n`;
-          availableProductsString += `Descripcion: ${
+          availableProductsString += `Product #${product.id}:\n`;
+          availableProductsString += `Name: ${product.name}\n`;
+          availableProductsString += `Description: ${
             product.description || "N/A"
           }\n`;
-          availableProductsString += `Precio: RD$${product.price}\n`;
+          availableProductsString += `Price: RD$${product.price}\n`;
           availableProductsString += "------------------------\n";
         }
       }
-      productsList = "Inventario\n------------------------\n";
+      productsList = "Inventory\n------------------------\n";
       productsList += availableProductsString;
       ctx.reply(productsList);
     }
@@ -67,13 +65,13 @@ function productsMenu(ctx, bot, userID, dashboardMenu) {
 
   bot.action("editProduct", (ctx) => {
     ctx.reply(
-      "Menu para edicion de productos\nSolo debes de pasar el id del producto que deseas modificar seguido de los parametros solicitados\n\n/editname [id]_nuevo nombre - Cambia el nombre de un producto\n/editdescription [id]_nueva descripcion - Cambia la descripcion de un producto\n/editprice [id]_nuevo precio - Cambia el precio de un producto\n/sold [id] - Marca un producto como vendido\n/unlist [id] - Deslista un producto"
+      "Editing products from your inventory\n\n/editname [id]_[new product name] - Edits a product's name\n/editdescription [id]_[new description] - Edits a product's description\n/editprice [id]_[new price] - Edits a product's price\n/sold [id] - Marks a product as sold\n/unlist [id] - Unlists a product"
     );
   });
 
   bot.action("addProduct", (ctx) => {
     ctx.reply(
-      "Para agregar productos utiliza el comando /addproduct seguido del nombre, descripcion, y precio del producto, cada uno separado por guiones bajos (_)"
+      "Adding products to your inventory: /addproduct [name]_[description]_[price]"
     );
   });
 
@@ -87,18 +85,18 @@ function productsMenu(ctx, bot, userID, dashboardMenu) {
         const isVendor = await isProductVendor(ctx, user, productID);
         console.log(isVendor);
         if (!isVendor) {
-          ctx.reply("Este producto no existe en tu inventario");
+          ctx.reply("This product doesn't exist in your inventory");
         } else {
           updateProductName(productID, productName);
           ctx.reply(
-            "Se ha modificado el nombre del producto, revisa tu inventario"
+            `The name of product #${input} has been changed successfully`
           );
           ctx.deleteMessage();
           conditionToStopHearingMessages = true;
           // mainMenu(ctx, bot);
         }
       } else {
-        ctx.reply("Favor inserta los datos solicitados de forma correcta");
+        ctx.reply("Insufficient parameters supplied");
       }
     }
   });
@@ -114,18 +112,18 @@ function productsMenu(ctx, bot, userID, dashboardMenu) {
         const productDescription = input[1];
         const isVendor = await isProductVendor(ctx, user, productID);
         if (!isVendor) {
-          ctx.reply("Este producto no existe en tu inventario");
+          ctx.reply("This product doesn't exist in your inventory");
         } else {
           updateProductDescription(productID, productDescription);
           ctx.reply(
-            "Se ha modificado la descripcion del producto, revisa tu inventario"
+            `The description of product #${input} has been changed successfully`
           );
           ctx.deleteMessage();
           conditionToStopHearingMessages = true;
           // mainMenu(ctx, bot);
         }
       } else {
-        ctx.reply("Favor inserta los datos solicitados de forma correcta");
+        ctx.reply("Insufficient parameters supplied");
       }
     }
   });
@@ -139,18 +137,18 @@ function productsMenu(ctx, bot, userID, dashboardMenu) {
         const productPrice = input[1];
         const isVendor = await isProductVendor(ctx, user, productID);
         if (!isVendor) {
-          ctx.reply("Este producto no existe en tu inventario");
+          ctx.reply("This product doesn't exist in your inventory");
         } else {
           updateProductPrice(productID, productPrice);
           ctx.reply(
-            "Se ha modificado el precio del producto, revisa tu inventario"
+            `The price of product #${input} has been changed successfully`
           );
           ctx.deleteMessage();
           conditionToStopHearingMessages = true;
           // mainMenu(ctx, bot);
         }
       } else {
-        ctx.reply("Favor inserta los datos solicitados de forma correcta");
+        ctx.reply("Insufficient parameters supplied");
       }
     }
   });
@@ -166,15 +164,13 @@ function productsMenu(ctx, bot, userID, dashboardMenu) {
         postProduct(productName, productDescription, productPrice, user);
         registerProductState = false;
         ctx.reply(
-          "El producto se ha registrado correctamente, revisa tu inventario"
+          `${productName} has been added to your inventory and is now on sale`
         );
         ctx.deleteMessage();
         conditionToStopHearingMessages = true;
         // mainMenu(ctx, bot);
       } else {
-        ctx.reply(
-          "Favor inserta los datos solicitados en este formato y sin corchetes [Mi producto_mi descripcion_100]"
-        );
+        ctx.reply("Insufficient parameters supplied");
       }
     }
   });
@@ -187,19 +183,17 @@ function productsMenu(ctx, bot, userID, dashboardMenu) {
         const productID = input[1];
         const isVendor = await isProductVendor(ctx, user, productID);
         if (!isVendor) {
-          ctx.reply("Este producto no existe en tu inventario");
+          ctx.reply("This product doesn't exist in your inventory");
         } else {
           registerProductState = false;
           updateProductStatus(productID, 2);
-          ctx.reply(
-            "El producto se ha registrado como vendido, revisa tu inventario"
-          );
+          ctx.reply(`Product #${input} has been registered as sold`);
           ctx.deleteMessage();
           conditionToStopHearingMessages = true;
           // mainMenu(ctx, bot);
         }
       } else {
-        ctx.reply("Favor inserta los datos solicitados de forma correcta");
+        ctx.reply("Insufficient parameters supplied");
       }
     }
   });
@@ -213,18 +207,18 @@ function productsMenu(ctx, bot, userID, dashboardMenu) {
         const isVendor = await isProductVendor(ctx, user, productID);
 
         if (!isVendor) {
-          ctx.reply("Este producto no existe en tu inventario");
+          ctx.reply("This product doesn't exist in your inventory");
         } else {
           registerProductState = false;
           updateProductStatus(productID, 4);
 
-          ctx.reply("El producto se deslistado de tu inventario");
+          `Product #${input} has been unlisted from your inventory`;
           ctx.deleteMessage();
           conditionToStopHearingMessages = true;
           // mainMenu(ctx, bot);
         }
       } else {
-        ctx.reply("Favor inserta los datos solicitados de forma correcta");
+        ctx.reply("Insufficient parameters supplied");
       }
     }
   });

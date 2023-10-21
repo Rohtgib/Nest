@@ -1,5 +1,6 @@
 const { catalogMenu } = require("./catalogMenu.js");
 const { productsMenu } = require("./productsMenu.js");
+const { optionsMenu } = require("./optionsMenu.js");
 
 function dashboardMenu(ctx, bot, userID, mainMenu) {
   user = userID;
@@ -15,6 +16,10 @@ function dashboardMenu(ctx, bot, userID, mainMenu) {
           {
             text: "My products",
             callback_data: "productsMenu",
+          },
+          {
+            text: "Options",
+            callback_data: "optionsMenu",
           },
           {
             text: "Log out",
@@ -33,7 +38,7 @@ function dashboardMenu(ctx, bot, userID, mainMenu) {
   });
 
   bot.action("optionsMenu", (ctx) => {
-    ctx.reply("Logica de opciones");
+    dashboardMenu(ctx, bot, user, dashboardMenu);
   });
 }
 

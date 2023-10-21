@@ -6,25 +6,25 @@ const {
 
 function catalogMenu(ctx, bot, userID, dashboardMenu) {
   user = userID;
-  let greetMessage = `Catalogo`;
+  let greetMessage = `Catalog`;
   bot.telegram.sendMessage(ctx.chat.id, greetMessage, {
     reply_markup: {
       inline_keyboard: [
         [
           {
-            text: "Ver nuevos productos",
+            text: "Browse new products",
             callback_data: "browseRecent",
           },
           {
-            text: "Buscar producto por nombre",
+            text: "Search for products",
             callback_data: "browseHelp",
           },
           {
-            text: "Expandir informacion sobre un producto",
+            text: "Expand product information",
             callback_data: "expandCommand",
           },
           {
-            text: "Atras",
+            text: "Go back",
             callback_data: "backtoDashboard",
           },
         ],
@@ -36,40 +36,38 @@ function catalogMenu(ctx, bot, userID, dashboardMenu) {
     let recentProductsString = "";
     var recentProducts = await getRecentProducts();
     if (recentProducts.products.length === 0) {
-      ctx.reply(
-        "No tienes productos disponibles en tu inventario, agregalos y empieza comerciar"
-      );
+      ctx.reply("No products are available, try again later");
     } else {
       for (let i = 0; i < recentProducts.products.length; i++) {
         const product = recentProducts.products[i];
         if (product.status && product.status.status_type === "Disponible") {
-          recentProductsString += `Producto ${product.id}:\n`;
-          recentProductsString += `Nombre: ${product.name}\n`;
-          recentProductsString += `Descripcion: ${
+          recentProductsString += `Product #${product.id}:\n`;
+          recentProductsString += `Name: ${product.name}\n`;
+          recentProductsString += `Description: ${
             product.description || "N/A"
           }\n`;
-          recentProductsString += `Precio: RD$${product.price}\n`;
+          recentProductsString += `Price: RD$${product.price}\n`;
           recentProductsString += "------------------------\n";
         }
       }
-      productsList = "Nuevos productos\n------------------------\n";
+      productsList = "Most recent products\n------------------------\n";
       productsList += recentProductsString;
       ctx.reply(productsList);
     }
   });
 
-bot.action("browseHelp", (ctx) => {
-	ctx.reply("Para buscar un producto por su nombre utiliza el comando /browse seguido de el nombre");
-});
+  bot.action("browseHelp", (ctx) => {
+    ctx.reply("To browse products by their names use /browse [product name]");
+  });
 
-bot.action("expandCommand", (ctx) => {
-	ctx.reply("Para expandir la informacion de un producto utiliza el comando /expand seguido del ID de producto");
-});
+  bot.action("expandCommand", (ctx) => {
+    ctx.reply("To expand product information use /expand [product no.]");
+  });
 
   bot.command("expand", async (ctx) => {
     conditionToStopHearingMessages = false;
     if (!conditionToStopHearingMessages) {
-      const input = ctx.message.text.split(" "); // Remove the command prefix and then split    console.log(input);
+      const input = ctx.message.text.split(" ");
       if (input.length === 2) {
         const productID = input[1];
         try {
@@ -77,23 +75,22 @@ bot.action("expandCommand", (ctx) => {
           const productData = product.products[0];
           const vendor = productData.vendor;
 
-          // Product information is available
           const productDetailString = `
-          Producto: ${productData.name}\n
-          Descripción: ${productData.description}\n
-          Precio: RD$$${productData.price}\n
-          Contacta al vendedor:\n
-          - Número de teléfono: ${vendor.phone || "No disponible"}\n
-          - Correo electrónico: ${vendor.email || "No disponible"}
+          Product: ${productData.name}\n
+          Description: ${productData.description}\n
+          Price: RD$${productData.price}\n
+          Vendor information:\n
+          - Phone number: ${vendor.phone || "Unavailable"}\n
+          - Email: ${vendor.email || "Unavailable"}
           `;
 
           ctx.reply(productDetailString);
         } catch (error) {
           console.log(error);
-          ctx.reply("Este producto no se pudo encontrar o no existe");
+          ctx.reply("This product couldn't be found or doesn't exist");
         }
       } else {
-        ctx.reply("Favor inserta los datos solicitados de forma correcta");
+        ctx.reply("Please use the command as follows: /expand [product no.]");
       }
     }
   });
@@ -106,27 +103,29 @@ bot.action("expandCommand", (ctx) => {
       try {
         const searchResult = await getProductsbyName(input);
         if (searchResult.products.length === 0) {
-          ctx.reply("No se han encontrado productos");
+          ctx.reply("No products were found");
         } else {
           for (let i = 0; i < searchResult.products.length; i++) {
             const product = searchResult.products[i];
             if (product.status && product.status.status_type === "Disponible") {
-              availableProductsString += `Producto ${product.id}:\n`;
-              availableProductsString += `Nombre: ${product.name}\n`;
-              availableProductsString += `Descripcion: ${
+              availableProductsString += `Product #${product.id}:\n`;
+              availableProductsString += `Name: ${product.name}\n`;
+              availableProductsString += `Description: ${
                 product.description || "N/A"
               }\n`;
-              availableProductsString += `Precio: RD$${product.price}\n`;
+              availableProductsString += `Price: RD$${product.price}\n`;
               availableProductsString += "------------------------\n";
             }
           }
-          productsList = "Resultado de busqueda\n------------------------\n";
+          productsList = `Search result for ${input}\n------------------------\n`;
           productsList += availableProductsString;
           ctx.reply(productsList);
         }
       } catch (error) {
         console.log(error);
-        ctx.reply("Ha ocurrido un error");
+        ctx.reply(
+          "An error ocurred, make sure you're using the command as explained: /browse [product name]"
+        );
       }
     }
   });
