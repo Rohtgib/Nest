@@ -93,7 +93,6 @@ function productsMenu(ctx, bot, userID, dashboardMenu) {
           );
           ctx.deleteMessage();
           conditionToStopHearingMessages = true;
-          // mainMenu(ctx, bot);
         }
       } else {
         ctx.reply("Insufficient parameters supplied");
@@ -120,7 +119,6 @@ function productsMenu(ctx, bot, userID, dashboardMenu) {
           );
           ctx.deleteMessage();
           conditionToStopHearingMessages = true;
-          // mainMenu(ctx, bot);
         }
       } else {
         ctx.reply("Insufficient parameters supplied");
@@ -145,7 +143,6 @@ function productsMenu(ctx, bot, userID, dashboardMenu) {
           );
           ctx.deleteMessage();
           conditionToStopHearingMessages = true;
-          // mainMenu(ctx, bot);
         }
       } else {
         ctx.reply("Insufficient parameters supplied");
@@ -155,7 +152,7 @@ function productsMenu(ctx, bot, userID, dashboardMenu) {
 
   bot.command("addproduct", (ctx) => {
     conditionToStopHearingMessages = false;
-    const input = ctx.message.text.replace(/^\/addproduct\s+/i, "").split("_"); // Remove the command prefix and then split    console.log(input);
+    const input = ctx.message.text.replace(/^\/addproduct\s+/i, "").split("_");
     if (!conditionToStopHearingMessages) {
       if (input.length === 3) {
         const productName = input[0];
@@ -168,7 +165,6 @@ function productsMenu(ctx, bot, userID, dashboardMenu) {
         );
         ctx.deleteMessage();
         conditionToStopHearingMessages = true;
-        // mainMenu(ctx, bot);
       } else {
         ctx.reply("Insufficient parameters supplied");
       }
@@ -178,7 +174,7 @@ function productsMenu(ctx, bot, userID, dashboardMenu) {
   bot.command("sold", async (ctx) => {
     conditionToStopHearingMessages = false;
     if (!conditionToStopHearingMessages) {
-      const input = ctx.message.text.split(" "); // Remove the command prefix and then split    console.log(input);
+      const input = ctx.message.text.split(" ");
       if (input.length === 2) {
         const productID = input[1];
         const isVendor = await isProductVendor(ctx, user, productID);
@@ -190,7 +186,6 @@ function productsMenu(ctx, bot, userID, dashboardMenu) {
           ctx.reply(`Product #${input} has been registered as sold`);
           ctx.deleteMessage();
           conditionToStopHearingMessages = true;
-          // mainMenu(ctx, bot);
         }
       } else {
         ctx.reply("Insufficient parameters supplied");
@@ -201,7 +196,7 @@ function productsMenu(ctx, bot, userID, dashboardMenu) {
   bot.command("unlist", async (ctx) => {
     conditionToStopHearingMessages = false;
     if (!conditionToStopHearingMessages) {
-      const input = ctx.message.text.split(" "); // Remove the command prefix and then split    console.log(input);
+      const input = ctx.message.text.split(" ");
       if (input.length === 2) {
         const productID = input[1];
         const isVendor = await isProductVendor(ctx, user, productID);
@@ -215,7 +210,6 @@ function productsMenu(ctx, bot, userID, dashboardMenu) {
           `Product #${input} has been unlisted from your inventory`;
           ctx.deleteMessage();
           conditionToStopHearingMessages = true;
-          // mainMenu(ctx, bot);
         }
       } else {
         ctx.reply("Insufficient parameters supplied");
